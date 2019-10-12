@@ -19,10 +19,10 @@ public class JCalculator extends JFrame implements ActionListener {
        }
     }
 	
-	BigInteger bileft;
-	BigInteger biright;
-	BigDecimal bdleft;
-	BigDecimal bdright;
+	private BigInteger bileft;
+	private BigInteger biright;
+	private BigDecimal bdleft;
+	private BigDecimal bdright;
 	
 //	double dleft=0;
 //	double dright=0;
@@ -32,9 +32,9 @@ public class JCalculator extends JFrame implements ActionListener {
 
 //	boolean isbig=false;
 
-	char op;
-	boolean isdouble=false;
-    int i;
+	private char op;
+	private boolean isdouble=false;
+    private int i;
     // Strings for Digit & Operator buttons.
     private final String[] str = { "7", "8", "9", "/", "4", "5", "6", "*", "1",
            "2", "3", "-", ".", "0", "=", "+" };
@@ -103,6 +103,8 @@ public class JCalculator extends JFrame implements ActionListener {
 //    	}
 //    }
     public void actionPerformed(ActionEvent e) {
+    	if(display.getText().equals("≥¢ ‘≥˝“‘¡„"))
+			display.setText("");
        Object target = e.getSource();
        String label = e.getActionCommand();
        if (target == reset)
@@ -112,7 +114,7 @@ public class JCalculator extends JFrame implements ActionListener {
        else
            handleOperator(label);
     }
-    public void calculateBigInteger(BigInteger left,BigInteger right,char op){
+    public void calculateBigInteger(BigInteger left,BigInteger right,char op)throws ArithmeticException{
 		switch(op){
 		case '+':display.setText(left.add(right).toString());break;
 		case '-':display.setText(left.subtract(right).toString());break;
@@ -120,7 +122,7 @@ public class JCalculator extends JFrame implements ActionListener {
 		case '/':display.setText(left.divide(right).toString());break;
 		}
     }
-    public void calculateBigDecimal(BigDecimal left,BigDecimal right,char op){
+    public void calculateBigDecimal(BigDecimal left,BigDecimal right,char op)throws ArithmeticException{
 		switch(op){
 		case '+':display.setText(left.add(right).toString());break;
 		case '-':display.setText(left.subtract(right).toString());break;
@@ -173,27 +175,31 @@ public class JCalculator extends JFrame implements ActionListener {
     	else{
 //    		long lanswer=0;
 //    		double danswer=0;
-    		if(isdouble){
+			try {
+				if (isdouble) {
 //    			if(isDouble(display.getText())){
 //					dright=Double.parseDouble(display.getText());
 //    			}else{
-    				bdright=new BigDecimal(display.getText());
-    				calculateBigDecimal(bdleft, bdright, op);
-    				return;
+					bdright = new BigDecimal(display.getText());
+					calculateBigDecimal(bdleft, bdright, op);
+					return;
 ////    			}
 //    			danswer=calculateDouble(dleft,dright,op);
 //				display.setText(String.valueOf(danswer));
-    		}else{
+				} else {
 //    			if(isLong(display.getText())){
 //					lright=Long.parseLong(display.getText());
 //    			}else{
-    				biright=new BigInteger(display.getText());
-    				calculateBigInteger(bileft, biright, op);
-    				return;
+					biright = new BigInteger(display.getText());
+					calculateBigInteger(bileft, biright, op);
+					return;
 //			}
 //    			lanswer=calculateLong(lleft,lright,op);
 //				display.setText(String.valueOf(lanswer));
-    		}
+				}
+			}catch(ArithmeticException e){
+				display.setText("≥¢ ‘≥˝“‘¡„");
+			}
     	}
 	}
 
